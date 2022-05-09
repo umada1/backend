@@ -4,18 +4,10 @@ package blogapplication.backend.controllers;
 import java.util.List;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCrypt;
-import org.springframework.validation.annotation.Validated;
+
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -26,9 +18,9 @@ import blogapplication.backend.classes.Resources;
 import blogapplication.backend.repositories.ResourceRepository;
 
 
-@CrossOrigin
+@CrossOrigin(origins = {"http://localhost:3000"})
 @RestController
-@RequestMapping("/api") // adds api in front of all addresses 
+@RequestMapping("/api")
 
 public class ResourceController {
 	
@@ -44,12 +36,12 @@ public class ResourceController {
 	}
 	
 	@GetMapping("/resources")
-	  List<Resources> all() {
+	  List<Resources> allResources() {
 	    return repository.findAll();
 	}
 	
-	@DeleteMapping("/resources/{id}")
-	  void deleteResources(@PathVariable Long id) {
+	@DeleteMapping("/deleteResource/{id}")
+	  void deleteResource(@PathVariable Long id) {
 	    repository.deleteById(id);
 	}
 	

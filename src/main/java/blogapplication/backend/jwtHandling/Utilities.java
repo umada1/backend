@@ -13,7 +13,7 @@ import io.jsonwebtoken.SignatureAlgorithm;
 
 @Service
 public class Utilities {
-	private String SECRET_KEY = "myspecialkey";
+	private String SECRET_KEY = "random69Zs2ilEj6XxUKAXi3keyEA4eYIkj113wTDu";// change to a longer one
 	
 	public Claims getFullClaims(String jwt) {
 		return Jwts.parser().setSigningKey(SECRET_KEY).parseClaimsJws(jwt).getBody();
@@ -37,7 +37,7 @@ public class Utilities {
 	
 	public String createJwt(Map<String,Object> clm, String selected) {
 		return Jwts.builder().setClaims(clm).setSubject(selected).setIssuedAt(new Date(System.currentTimeMillis()))
-				.setExpiration(new Date(System.currentTimeMillis() + 60*60*1000))
+				.setExpiration(new Date(System.currentTimeMillis() + 60*60*1000))// one hour
 				.signWith(SignatureAlgorithm.HS256, SECRET_KEY).compact();
 	}
 	

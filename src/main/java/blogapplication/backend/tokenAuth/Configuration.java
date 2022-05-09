@@ -3,6 +3,8 @@ package blogapplication.backend.tokenAuth;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
+
+
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -32,20 +34,22 @@ public class Configuration extends WebSecurityConfigurerAdapter{
 	
 	@Override
 	protected void configure(HttpSecurity h) throws Exception {
-		h.csrf().disable().authorizeRequests()
+		h.cors().and().csrf().disable().authorizeRequests()
 		.antMatchers("/api/register").permitAll()
 		.antMatchers("/api/auth").permitAll()
+		.antMatchers("/api/deleteResource/*").hasRole("ADMIN")
+		.antMatchers("/api/deleteUser/*").hasRole("ADMIN")
 		.anyRequest().authenticated().and()
 		.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 	h.addFilterBefore(reqFilter, UsernamePasswordAuthenticationFilter.class);
 	}
 	
+	@SuppressWarnings("deprecation")
 	@Bean
 	public static PasswordEncoder passwordEncoder() {
 	 return NoOpPasswordEncoder.getInstance();
 	}
 
-	
 	@Bean 
 	public AuthenticationManager authenticationManagerBean() throws Exception{
 		return super.authenticationManagerBean();

@@ -2,9 +2,9 @@ package blogapplication.backend.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCrypt;
@@ -22,10 +22,9 @@ import blogapplication.backend.repositories.UserRepository;
 import blogapplication.backend.tokenAuth.DetailsOfUsers;
 
 
-
 @CrossOrigin
 @RestController
-@RequestMapping("/api") // adds api in front of all addresses  
+@RequestMapping("/api")
 
 public class AuthController {
 	
@@ -46,25 +45,25 @@ public class AuthController {
 	
 	
 	@PostMapping("/auth")
-	
-	ResponseEntity<?> createAuthenticationToken(@RequestBody Request req) throws Exception{
+	ResponseEntity<?> createAuthenticationToken(@RequestBody Request req) throws RuntimeException{
 		
-		Users i = repository.findByUsername(req.getUsername());
-		if (BCrypt.checkpw(req.getPassword(), i.getPassword())) {
-			try {
-				authMan.authenticate(
-						new UsernamePasswordAuthenticationToken(req.getUsername(), i.getPassword()));
-			}catch(BadCredentialsException exception){
-				throw new Exception("incorrect password",exception);
+		if(repository.findByUsername(req.getUsername()) != null) {
+			
+			Users i = repository.findByUsername(req.getUsername());
+			if (BCrypt.checkpw(req.getPassword(), i.getPassword())) {
+				
+				authMan.authenticate(new UsernamePasswordAuthenticationToken(req.getUsername(), i.getPassword()));
+				
+				UserDetails details = user.loadUserByUsername(req.getUsername());
+				
+				String tokencred = token.newJwt(details);
+				return ResponseEntity.ok(new Response(tokencred));
+				
 			}
-			
-			UserDetails details = user.loadUserByUsername(req.getUsername());
-			
-			String tokencred = token.newJwt(details);
-			return ResponseEntity.ok(new Response(tokencred));
-			
+			return (ResponseEntity<?>) ResponseEntity.notFound().build();
 		}
-		return (ResponseEntity<?>) ResponseEntity.notFound();
+		
+		return (ResponseEntity<?>) ResponseEntity.notFound().build();
 		
 	}
 

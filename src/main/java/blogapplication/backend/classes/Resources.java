@@ -14,13 +14,19 @@ public class Resources {
 	
 	private String entry;
 	
-	Resources(){
+	private String author;
+	
+	private String creation;
+	
+	public Resources(){
 		
 	}
 	
-	public Resources(long id, String entry) {
+	public Resources(long id, String entry, String author, String creation) {
 		this.id = id;
 		this.entry = entry;
+		this.author = author;
+		this.creation = creation;
 	}
 	
 	public long getId() {
@@ -37,6 +43,22 @@ public class Resources {
 	
 	public void setEntry(String entry) {
 		this.entry = entry;
+	}
+	
+	public String getAuthor() {
+		return this.author;
+	}
+	
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+	
+	public String getCreation() {
+		return this.creation;
+	}
+	
+	public void setCreation(String creation) {
+		this.creation = creation;
 	}
 	
 }
